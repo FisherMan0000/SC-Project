@@ -1,25 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\watta\\angular-projects\\TestNET\\SC-Project\\Backend\\Backend.csproj": {}
+    "C:\\WebAppDev\\MyAngularDotNetApp\\SC-Project\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\watta\\angular-projects\\TestNET\\SC-Project\\Backend\\Backend.csproj": {
+    "C:\\WebAppDev\\MyAngularDotNetApp\\SC-Project\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\watta\\angular-projects\\TestNET\\SC-Project\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\WebAppDev\\MyAngularDotNetApp\\SC-Project\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\watta\\angular-projects\\TestNET\\SC-Project\\Backend\\Backend.csproj",
-        "packagesPath": "C:\\Users\\watta\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\watta\\angular-projects\\TestNET\\SC-Project\\Backend\\obj\\",
+        "projectPath": "C:\\WebAppDev\\MyAngularDotNetApp\\SC-Project\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\fish0\\.nuget\\packages\\",
+        "outputPath": "C:\\WebAppDev\\MyAngularDotNetApp\\SC-Project\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\watta\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\fish0\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -102,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
