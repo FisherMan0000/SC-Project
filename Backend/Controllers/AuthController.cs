@@ -136,6 +136,10 @@ using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
 
 namespace Backend.Controllers
 {
@@ -144,48 +148,38 @@ namespace Backend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, IOptions<JwtSettings> jwtSettings)
         {
             _configuration = configuration;
+            _jwtSettings = jwtSettings.Value; 
         }
 
-        // [HttpPost("login")]
-        // public IActionResult Login([FromBody] User loginRequest)
-        // {
-        //     if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
-        //     {
-        //         return BadRequest(new { success = false, message = "Invalid input" });
-        //     }
+        
 
-        //     var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-        //     using (var connection = new SqlConnection(connectionString))
-        //     {
-        //         connection.Open();
+        private string GenerateJwtToken(string username, string role)
+        {
+            var claims = new[]
+            {
+        new Claim(JwtRegisteredClaimNames.Sub, username),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.Role, role)
+    };
 
-        //         // Query to check both Manager and Customer
-        //         var user = connection.QueryFirstOrDefault<User>(
-        //             @"SELECT u.username, u.password, u.role 
-        //               FROM Users u 
-        //               WHERE u.username = @Username",
-        //             new { Username = loginRequest.Username });
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        //         if (user == null)
-        //         {
-        //             return Unauthorized(new { success = false, message = "Invalid username or password" });
-        //         }
+            var token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
 
-        //         // Verify hashed password
-        //         if (!VerifyPassword(loginRequest.Password, user.Password))
-        //         {
-        //             return Unauthorized(new { success = false, message = "Invalid username or password" });
-        //         }
-
-        //         return Ok(new { success = true, role = user.Role });
-        //     }
-        // }
-
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
         [HttpPost("login")]
         public IActionResult Login([FromBody] User loginRequest)
         {
@@ -218,14 +212,17 @@ namespace Backend.Controllers
                     return Unauthorized(new { success = false, message = "Invalid username or password" });
                 }
 
+                // Generate JWT Token
+                var token = GenerateJwtToken(user.Username, user.Role);
+
                 // Handle role-based login
                 if (user.Role == "Manager")
                 {
-                    return Ok(new { success = true, role = "Manager", message = "Manager login successful" });
+                    return Ok(new { success = true, role = "Manager", message = "Manager login successful", token });
                 }
                 else if (user.Role == "Customer")
                 {
-                    return Ok(new { success = true, role = "Customer", message = "Customer login successful" });
+                    return Ok(new { success = true, role = "Customer", message = "Customer login successful", token });
                 }
                 else
                 {
@@ -236,7 +233,7 @@ namespace Backend.Controllers
 
         private IActionResult Forbid(object value)
         {
-            throw new NotImplementedException();
+            return StatusCode(403, value);
         }
 
         [HttpPost("register")]
@@ -375,5 +372,9 @@ namespace Backend.Controllers
             var inputPasswordHash = HashPassword(inputPassword);
             return inputPasswordHash == hashedPassword;
         }
+    }
+
+    internal class jwtSettings
+    {
     }
 }
