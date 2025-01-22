@@ -1,134 +1,3 @@
-// // AuthControllers.cs
-// using Microsoft.AspNetCore.Mvc;
-// using Backend.Models;
-// using Dapper;
-// using Microsoft.Extensions.Configuration;
-// using System.Data.SqlClient;
-// using System.Security.Cryptography;
-// using System.Text;
-
-// namespace Backend.Controllers
-// {
-//     [ApiController]
-//     [Route("api/[controller]")]
-//     public class AuthController : ControllerBase
-//     {
-//         private readonly IConfiguration _configuration;
-
-//         public AuthController(IConfiguration configuration)
-//         {
-//             _configuration = configuration;
-//         }
-
-//         [HttpPost("login")]
-//         public IActionResult Login([FromBody] User loginRequest)
-//         {
-//             if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
-//             {
-//                 return BadRequest(new { success = false, message = "Invalid input" });
-//             }
-
-//             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-//             using (var connection = new SqlConnection(connectionString))
-//             {
-//                 var user = connection.QueryFirstOrDefault<User>(
-//                     "SELECT * FROM Manager WHERE username = @Username AND password = @Password",
-//                     new { Username = loginRequest.Username, Password = loginRequest.Password });
-
-//                 if (user == null)
-//                 {
-//                     return Unauthorized(new { success = false, message = "Invalid username or password" });
-//                 }
-
-//                 return Ok(new { success = true, role = user.Role });
-//             }
-//         }
-
-//         [HttpPost("register")]
-//         public IActionResult Register([FromBody] Customer customer)
-//         {
-//             if (customer == null || string.IsNullOrEmpty(customer.Username) || string.IsNullOrEmpty(customer.Password))
-//             {
-//                 Console.WriteLine("Invalid input: Customer data is missing.");
-//                 return BadRequest(new { success = false, message = "Invalid input" });
-//             }
-
-//             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-//             Console.WriteLine($"Using connection string: {connectionString}");
-
-//             using (var connection = new SqlConnection(connectionString))
-//             {
-//                 try
-//                 {
-//                     connection.Open();
-//                     Console.WriteLine("Database connection opened successfully.");
-
-//                     // Check if username already exists
-//                     var existingUser = connection.QueryFirstOrDefault<Customer>(
-//                         "SELECT * FROM Customer WHERE Username = @Username",
-//                         new { Username = customer.Username });
-
-//                     if (existingUser != null)
-//                     {
-//                         Console.WriteLine($"Username '{customer.Username}' already exists.");
-//                         return BadRequest(new { success = false, message = "Username already exists" });
-//                     }
-
-//                     // Hash the password
-//                     customer.Password = HashPassword(customer.Password);
-//                     Console.WriteLine($"Password hashed: {customer.Password}");
-
-//                     // Insert the user into the database
-//                     var sql = @"
-//                         INSERT INTO Customer (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id)
-//                         VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);";
-
-//                     // Generate a new user_id (int)
-//                     var userId = connection.QuerySingle<int>(
-//                         @"
-//                         INSERT INTO Users (username, password, role)
-//                         VALUES (@Username, @Password, @Role);
-//                         SELECT CAST(SCOPE_IDENTITY() as int);",
-//                         new
-//                         {
-//                             Username = customer.Username,
-//                             Password = customer.Password,
-//                             Role = "Customer" // Assign a default role
-//                         });
-
-//                     // Assign the generated user_id to the Customer table
-//                     customer.UserId = userId;
-
-//                     connection.Execute(sql, customer);
-
-//                     Console.WriteLine("User registered successfully.");
-//                     return Ok(new { success = true, message = "User registered successfully" });
-//                 }
-//                 catch (SqlException sqlEx)
-//                 {
-//                     Console.WriteLine($"SQL Exception: {sqlEx.Message}");
-//                     return StatusCode(500, new { success = false, message = "Database error" });
-//                 }
-//                 catch (Exception ex)
-//                 {
-//                     Console.WriteLine($"General Exception: {ex.Message}");
-//                     return StatusCode(500, new { success = false, message = "Internal server error" });
-//                 }
-//             }
-//         }
-
-//         private string HashPassword(string password)
-//         {
-//             using var sha256 = SHA256.Create();
-//             var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-//             return Convert.ToBase64String(bytes);
-//         }
-//     }
-// }
-
-
-
 using Microsoft.AspNetCore.Mvc;
 using Backend.Models;
 using Dapper;
@@ -136,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
 
 namespace Backend.Controllers
 {
@@ -144,48 +17,38 @@ namespace Backend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, IOptions<JwtSettings> jwtSettings)
         {
             _configuration = configuration;
+            _jwtSettings = jwtSettings.Value;
         }
 
-        // [HttpPost("login")]
-        // public IActionResult Login([FromBody] User loginRequest)
-        // {
-        //     if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
-        //     {
-        //         return BadRequest(new { success = false, message = "Invalid input" });
-        //     }
 
-        //     var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-        //     using (var connection = new SqlConnection(connectionString))
-        //     {
-        //         connection.Open();
 
-        //         // Query to check both Manager and Customer
-        //         var user = connection.QueryFirstOrDefault<User>(
-        //             @"SELECT u.username, u.password, u.role 
-        //               FROM Users u 
-        //               WHERE u.username = @Username",
-        //             new { Username = loginRequest.Username });
+        private string GenerateJwtToken(string username, string role)
+        {
+            var claims = new[]
+            {
+        new Claim(JwtRegisteredClaimNames.Sub, username),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.Role, role)
+    };
 
-        //         if (user == null)
-        //         {
-        //             return Unauthorized(new { success = false, message = "Invalid username or password" });
-        //         }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        //         // Verify hashed password
-        //         if (!VerifyPassword(loginRequest.Password, user.Password))
-        //         {
-        //             return Unauthorized(new { success = false, message = "Invalid username or password" });
-        //         }
+            var token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
 
-        //         return Ok(new { success = true, role = user.Role });
-        //     }
-        // }
-
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
         [HttpPost("login")]
         public IActionResult Login([FromBody] User loginRequest)
         {
@@ -218,14 +81,17 @@ namespace Backend.Controllers
                     return Unauthorized(new { success = false, message = "Invalid username or password" });
                 }
 
+                // Generate JWT Token
+                var token = GenerateJwtToken(user.Username, user.Role);
+
                 // Handle role-based login
                 if (user.Role == "Manager")
                 {
-                    return Ok(new { success = true, role = "Manager", message = "Manager login successful" });
+                    return Ok(new { success = true, role = "Manager", message = "Manager login successful", token });
                 }
                 else if (user.Role == "Customer")
                 {
-                    return Ok(new { success = true, role = "Customer", message = "Customer login successful" });
+                    return Ok(new { success = true, role = "Customer", message = "Customer login successful", token });
                 }
                 else
                 {
@@ -236,7 +102,7 @@ namespace Backend.Controllers
 
         private IActionResult Forbid(object value)
         {
-            throw new NotImplementedException();
+            return StatusCode(403, value);
         }
 
         [HttpPost("register")]
@@ -375,5 +241,9 @@ namespace Backend.Controllers
             var inputPasswordHash = HashPassword(inputPassword);
             return inputPasswordHash == hashedPassword;
         }
+    }
+
+    internal class jwtSettings
+    {
     }
 }
