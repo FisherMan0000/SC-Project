@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj": {}
+    "d:\\SC\\SC-Project-1\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj": {
+    "d:\\SC\\SC-Project-1\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj",
+        "projectUniqueName": "d:\\SC\\SC-Project-1\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj",
+        "projectPath": "d:\\SC\\SC-Project-1\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\66969\\.nuget\\packages\\",
-        "outputPath": "D:\\SC\\SC-Project-1\\Backend\\obj\\",
+        "outputPath": "d:\\SC\\SC-Project-1\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\66969\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,9 +44,21 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.35, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.2, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -58,9 +70,17 @@
               "target": "Package",
               "version": "[9.0.1, )"
             },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[8.3.1, )"
+            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.9.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.3.1, )"
             }
           },
           "imports": [
