@@ -205,11 +205,3 @@
     margin-top: 30px;
     color: #fff;
   }
-
-  .register a {
-    color: #efefef;
-    text-decoration: none;
-  }
-  .register a:hover {
-    text-decoration: underline;
-  }
