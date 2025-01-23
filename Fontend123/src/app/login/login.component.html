@@ -1,37 +1,77 @@
 <div class="container">
-    <div class="form-container login">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+    <!-- Login Form -->
+    <div *ngIf="isLogin" >
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <h1>Login</h1>
-        <input
-        type="text"
-        formControlName="username"
-        placeholder="Username"
-        required
-        [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
-    />
-    
-        
+        <input  type="text" formControlName="username" placeholder="Username" required />
         <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-        <small style="color: red;">Username is required.</small>
+          <small style="color: red;">Username is required.</small>
         </div>
-        
-        <input
-        type="password"
-        formControlName="password"
-        placeholder="Password"
-        required
-        [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        />
+        <input type="password" formControlName="password" placeholder="Password" required />
         <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        <small style="color: red;">Password is required.</small>
+          <small style="color: red;">Password is required.</small>
         </div>
-        
-        <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-        </div>
-        
+        <div *ngIf="errorMessage">{{ errorMessage }}</div>
         <button type="submit" [disabled]="loginForm.invalid">Login</button>
-        
-    </form>
+        <button type="button" (click)="toggleForm()">Go to Register</button>
+      </form>
     </div>
-</div>
+  
+    <!-- Register Form -->
+    <div *ngIf="!isLogin">
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <h1>Register</h1>
+
+        <input type="text" formControlName="name" placeholder="Name" required />
+        <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
+          <small style="color: red;">Name is required.</small>
+        </div>
+
+        <input type="email" formControlName="email" placeholder="Email" required />
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <small style="color: red;">Valid email is required.</small>
+        </div>
+
+        <input type="text" formControlName="username" placeholder="Username" required />
+        <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+          <small style="color: red;">Username is required.</small>
+        </div>
+
+        <input type="password" formControlName="password" placeholder="Password" required />
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          <small style="color: red;">Password must be at least 6 characters.</small>
+        </div>
+
+        <input type="password" formControlName="confirmPassword" placeholder="Confirm Password" required />
+        <div *ngIf="registerForm.errors?.['passwordMismatch']">
+            <small style="color: red;">Passwords do not match.</small>
+          </div>
+
+        <input type="text" formControlName="PhoneNo" placeholder="Phone Number" required />
+        <div *ngIf="registerForm.get('PhoneNo')?.invalid && registerForm.get('PhoneNo')?.touched">
+          <small style="color: red;">Phone Number is required.</small>
+        </div>
+
+        <input type="text" formControlName="address" placeholder="Address" required />
+        <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched">
+          <small style="color: red;">Address is required.</small>
+        </div>
+
+        <input type="text" formControlName="gender" placeholder="Gender" required />
+        <div *ngIf="registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched">
+          <small style="color: red;">Gender is required.</small>
+        </div>
+
+        <input type="date" formControlName="Dob" placeholder="Date of Birth" required />
+        <div *ngIf="registerForm.get('Dob')?.invalid && registerForm.get('Dob')?.touched">
+          <small style="color: red;">Date of Birth is required.</small>
+        </div>
+
+        
+
+        <button type="submit" [disabled]="registerForm.invalid">Register</button>
+        <button type="button" (click)="toggleForm()">Go to Login</button>
+      </form>
+    </div>
+  </div>
+  
