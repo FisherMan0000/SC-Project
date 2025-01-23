@@ -203,8 +203,8 @@ namespace Backend.Controllers
                 // Query to fetch user details based on the username
                 var user = connection.QueryFirstOrDefault<User>(
                     @"SELECT u.username, u.password, u.role 
-              FROM Users u 
-              WHERE u.username = @Username",
+            FROM Users u 
+            WHERE u.username = @Username",
                     new { Username = loginRequest.Username });
 
                 if (user == null)
@@ -271,8 +271,8 @@ namespace Backend.Controllers
                     // Insert into Users and get the UserId
                     var userId = connection.QuerySingle<int>(
                         @"INSERT INTO Users (username, password, role) 
-                          VALUES (@Username, @Password, @Role);
-                          SELECT CAST(SCOPE_IDENTITY() as int);",
+                        VALUES (@Username, @Password, @Role);
+                        SELECT CAST(SCOPE_IDENTITY() as int);",
                         new
                         {
                             Username = customer.Username,
@@ -285,7 +285,7 @@ namespace Backend.Controllers
 
                     connection.Execute(
                         @"INSERT INTO Customer (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id) 
-                          VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
+                        VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
                         customer);
 
                     return Ok(new { success = true, message = "User registered successfully" });
@@ -333,8 +333,8 @@ namespace Backend.Controllers
                     // Insert into Users table and get the UserId
                     var userId = connection.QuerySingle<int>(
                         @"INSERT INTO Users (username, password, role) 
-                  VALUES (@Username, @Password, @Role);
-                  SELECT CAST(SCOPE_IDENTITY() as int);",
+                VALUES (@Username, @Password, @Role);
+                SELECT CAST(SCOPE_IDENTITY() as int);",
                         new
                         {
                             Username = manager.Username,
@@ -347,7 +347,7 @@ namespace Backend.Controllers
 
                     connection.Execute(
                         @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id) 
-                  VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
+                VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
                         manager);
 
                     return Ok(new { success = true, message = "Manager added successfully" });

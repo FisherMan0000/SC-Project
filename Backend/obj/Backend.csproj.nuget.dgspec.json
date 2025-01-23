@@ -1,28 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\WebAppDev\\MyAngularDotNetApp\\Backend\\Backend\\Backend.csproj": {}
+    "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\WebAppDev\\MyAngularDotNetApp\\Backend\\Backend\\Backend.csproj": {
+    "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\WebAppDev\\MyAngularDotNetApp\\Backend\\Backend\\Backend.csproj",
+        "projectUniqueName": "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\WebAppDev\\MyAngularDotNetApp\\Backend\\Backend\\Backend.csproj",
-        "packagesPath": "C:\\Users\\fish0\\.nuget\\packages\\",
-        "outputPath": "C:\\WebAppDev\\MyAngularDotNetApp\\Backend\\Backend\\obj\\",
+        "projectPath": "D:\\SC\\SC-Project-1\\Backend\\Backend.csproj",
+        "packagesPath": "C:\\Users\\66969\\.nuget\\packages\\",
+        "outputPath": "D:\\SC\\SC-Project-1\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\fish0\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\66969\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -85,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
