@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',

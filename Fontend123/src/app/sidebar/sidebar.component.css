@@ -1,0 +1,74 @@
+/* Sidebar Styles */
+.d-flex {
+    display: flex;
+}
+
+nav {
+    width: 250px; /* Set the sidebar width */
+    height: 100vh; /* Full height of the viewport */
+    background-color: #f8f9fa; /* Light background for the sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+    padding: 20px;
+    position: fixed; /* Fixed sidebar on the left */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensures sidebar is above other content */
+}
+
+.nav-item {
+    margin-bottom: 1rem; /* Space between the menu items */
+}
+
+.nav-link {
+    display: block; /* Makes the entire area clickable */
+    padding: 12px 20px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px;
+    font-weight: 500;
+    color: #007bff; /* Primary color for text */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover transition */
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: #007bff; /* Background on hover or active state */
+    color: #fff; /* Change text color when active or hovered */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+.nav-link:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add custom focus effect */
+}
+
+.text-start {
+    text-align: left; /* Ensure text is aligned to the left */
+}
+
+.w-100 {
+    width: 100%; /* Make sure the links span the full width of the sidebar */
+}
+
+/* Content Area */
+.flex-grow-1 {
+    flex-grow: 1;
+    margin-left: 250px; /* Offset the content from the sidebar */
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    /* For small screens, make the sidebar collapsible */
+    nav {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .flex-grow-1 {
+        margin-left: 0; /* Remove the margin for small screens */
+    }
+
+    .d-flex {
+        flex-direction: column;
+    }
+}
