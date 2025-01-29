@@ -5,6 +5,9 @@ import { GuardsComponent } from './guards/guards.component';
 import { NgModule } from '@angular/core';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { ContactusComponent } from './contactus/contactus.component'; 
+import { DashBoardComponent } from './dash-board/dash-board.component';
+import { addManagerComponent } from './add-manager/add-manager.component';
+import { TestTest1Component } from './test-test1/test-test1.component';
 
 
 export const routes: Routes = [
@@ -14,6 +17,10 @@ export const routes: Routes = [
     { path: 'about', component: AboutusComponent },
     { path: 'contact', component: ContactusComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: 'dashboard', component: DashBoardComponent },
+    { path: 'add-manager', component: addManagerComponent},
+    {path: 'test1', component: TestTest1Component}
+
     
   ];
   

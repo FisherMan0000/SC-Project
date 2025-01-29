@@ -1,0 +1,138 @@
+<app-sidebar></app-sidebar>
+<div *ngIf="!isLogin" role="manager" aria-labelledby="register-form">
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()" role="form" aria-labelledby="register-form">
+    <h1 id="register-form">Register</h1>
+
+    <!-- Name Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="name" 
+        placeholder="Name" 
+        required 
+        aria-describedby="nameError"
+      />
+      <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" id="nameError">
+        <small style="color: red;" role="alert">Name is required.</small>
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="form-group">
+      <input 
+        type="email" 
+        formControlName="email" 
+        placeholder="Email" 
+        required 
+        aria-describedby="emailError"
+      />
+      <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" id="emailError">
+        <small style="color: red;" role="alert">Valid email is required.</small>
+      </div>
+    </div>
+
+    <!-- Username Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="username" 
+        placeholder="Username" 
+        required 
+        aria-describedby="usernameError"
+      />
+      <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" id="usernameError">
+        <small style="color: red;" role="alert">Username is required.</small>
+      </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+      <input 
+        type="password" 
+        formControlName="password" 
+        placeholder="Password" 
+        required 
+        aria-describedby="passwordError"
+      />
+      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" id="passwordError">
+        <small style="color: red;" role="alert">Please enter a password.</small>
+      </div>
+    </div>
+
+    <!-- Confirm Password Field -->
+    <div class="form-group">
+      <input 
+        type="password" 
+        formControlName="confirmPassword" 
+        placeholder="Confirm Password" 
+        required 
+        aria-describedby="confirmPasswordError"
+      />
+      <div *ngIf="registerForm.errors?.['passwordMismatch']" id="confirmPasswordError">
+        <small style="color: red;" role="alert">Passwords do not match.</small>
+      </div>
+    </div>
+
+    <!-- Phone Number Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="PhoneNo" 
+        placeholder="Phone Number" 
+        required 
+        aria-describedby="phoneError"
+      />
+      <div *ngIf="registerForm.get('PhoneNo')?.invalid && registerForm.get('PhoneNo')?.touched" id="phoneError">
+        <small style="color: red;" role="alert">Phone Number is required.</small>
+      </div>
+    </div>
+
+    <!-- Address Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="address" 
+        placeholder="Address" 
+        required 
+        aria-describedby="addressError"
+      />
+      <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched" id="addressError">
+        <small style="color: red;" role="alert">Address is required.</small>
+      </div>
+    </div>
+
+    <!-- Gender Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="gender" 
+        placeholder="Gender" 
+        required 
+        aria-describedby="genderError"
+      />
+      <div *ngIf="registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched" id="genderError">
+        <small style="color: red;" role="alert">Gender is required.</small>
+      </div>
+    </div>
+
+    <!-- Date of Birth Field -->
+    <div class="form-group">
+      <input 
+        type="date" 
+        formControlName="Dob" 
+        placeholder="Date of Birth" 
+        required 
+        aria-describedby="dobError"
+      />
+      <div *ngIf="registerForm.get('Dob')?.invalid && registerForm.get('Dob')?.touched" id="dobError">
+        <small style="color: red;" role="alert">Date of Birth is required.</small>
+      </div>
+    </div>
+
+    <!-- Register Button -->
+    <button type="submit" [disabled]="registerForm.invalid" aria-label="Register to create an account">Register</button>
+
+    <!-- Button to toggle to Login Form -->
+    <button type="button" (click)="toggleForm()" aria-label="Switch to Login">Go to Login</button>
+  </form>
+</div>
