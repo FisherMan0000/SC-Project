@@ -11,6 +11,6 @@ namespace Backend.Models
         public string Address { get; set; }
         public string Gender { get; set; }
         public DateTime Dob { get; set; }
-        public int User_Id { get; set; }
+        public int User_id { get; set; }
     }
 }
