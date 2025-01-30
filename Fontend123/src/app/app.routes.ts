@@ -7,7 +7,11 @@ import { AboutusComponent } from './aboutus/aboutus.component';
 import { ContactusComponent } from './contactus/contactus.component'; 
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { addManagerComponent } from './add-manager/add-manager.component';
-import { TestTest1Component } from './test-test1/test-test1.component';
+import { AddBGComponent } from './add-bg/add-bg.component';
+import { RevenuesComponent } from './revenues/revenues.component';
+import { ServiceInfoComponent } from './service-info/service-info.component';
+import { BGinfoComponent } from './bginfo/bginfo.component';
+import { BginfosComponent } from './bginfos/bginfos.component';
 
 
 export const routes: Routes = [
@@ -19,7 +23,12 @@ export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'dashboard', component: DashBoardComponent },
     { path: 'add-manager', component: addManagerComponent},
-    {path: 'test1', component: TestTest1Component}
+    {path: 'addbg', component: AddBGComponent},
+    {path: 'revenue', component: RevenuesComponent},
+    {path: 'serviceinfo', component: ServiceInfoComponent},
+    {path: 'bginfo', component: BGinfoComponent},
+    {path: 'bginfos', component: BginfosComponent},
+
 
     
   ];

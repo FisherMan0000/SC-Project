@@ -16,7 +16,8 @@ namespace Backend.Controllers
         {
             _configuration = configuration;
         }
-        // Post--> api/Guard
+
+        // POST --> api/Guard
         [HttpPost]
         public IActionResult AddGuard([FromBody] Guard guard)
         {
@@ -33,22 +34,12 @@ namespace Backend.Controllers
                 {
                     connection.Open();
 
-                    // check for manager id
-                    var checkQuery = "SELECT COUNT(1) FROM Manager WHERE User_Id = @User_id";
-                    var exists = connection.ExecuteScalar<bool>(checkQuery, new { User_id = guard.User_id });
+                    var insertQuery = @"INSERT INTO Guards (image_url, name, age, gender, skills, type, bio)
+                                        VALUES (@Image_url, @Name, @Age, @Gender, @Skills, @Type, @Bio);
+                                        SELECT CAST(SCOPE_IDENTITY() as int);";
 
-                    if (!exists)
-                    {
-                        return BadRequest(new { success = false, message = "Invalid User_id: Manager not found" });
-                    }
-
-
-                    var insertQuery = @"INSERT INTO Guards (User_id, Image_url, Name, Age, Gender, Skills, Type, Bio)
-                VALUES (@User_id, @Image_url, @Name, @Age, @Gender, @Skills, @Type, @Bio);
-                SELECT CAST(SCOPE_IDENTITY() as int);";
-
-                    var id = connection.QuerySingle<int>(insertQuery, guard);
-                    guard.Id = id;
+                    var guardId = connection.QuerySingle<int>(insertQuery, guard);
+                    guard.Guard_id = guardId;
 
                     return Ok(new { success = true, message = "Guard added successfully", guard });
                 }
@@ -63,8 +54,7 @@ namespace Backend.Controllers
             }
         }
 
-
-        // GET--> api/Guard
+        // GET --> api/Guard
         [HttpGet]
         public IActionResult GetAllGuards()
         {
@@ -92,7 +82,7 @@ namespace Backend.Controllers
             }
         }
 
-        // GET--> api/Guard/{id}
+        // GET --> api/Guard/{id}
         [HttpGet("{id}")]
         public IActionResult GetGuardById(int id)
         {
@@ -104,8 +94,8 @@ namespace Backend.Controllers
                 {
                     connection.Open();
 
-                    var query = "SELECT * FROM Guards WHERE Id = @Id";
-                    var guard = connection.QueryFirstOrDefault<Guard>(query, new { Id = id });
+                    var query = "SELECT guard_id , image_url, name, age, gender, skills, type, bio FROM Guards WHERE guard_id = @guard_id";
+                    var guard = connection.QueryFirstOrDefault<Guard>(query, new { guard_id = id });
 
                     if (guard == null)
                     {
@@ -124,37 +114,16 @@ namespace Backend.Controllers
                 }
             }
         }
-        // Get--> api/Guard/by-type/{type}
-        [HttpGet("by-type/{type}")]
-        public IActionResult GetGuardsByType(string type)
+
+        // PUT --> api/Guard/{id}
+        [HttpPut("{id}")]
+        public IActionResult UpdateGuard(int id, [FromBody] Guard guard)
         {
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-            using (var connection = new SqlConnection(connectionString))
+            if (guard == null || string.IsNullOrEmpty(guard.Name))
             {
-                try
-                {
-                    connection.Open();
-
-                    var query = "SELECT * FROM Guards WHERE Type = @Type";
-                    var guards = connection.Query<Guard>(query, new { Type = type }).ToList();
-
-                    return Ok(new { success = true, data = guards });
-                }
-                catch (SqlException sqlEx)
-                {
-                    return StatusCode(500, new { success = false, message = "Database error", details = sqlEx.Message });
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, new { success = false, message = "Internal server error", details = ex.Message });
-                }
+                return BadRequest(new { success = false, message = "Invalid input" });
             }
-        }
-        // GET: api/Guard/by-gender/{gender}
-        [HttpGet("by-gender/{gender}")]
-        public IActionResult GetGuardsByGender(string gender)
-        {
+
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             using (var connection = new SqlConnection(connectionString))
@@ -163,10 +132,42 @@ namespace Backend.Controllers
                 {
                     connection.Open();
 
-                    var query = "SELECT * FROM Guards WHERE Gender = @Gender";
-                    var guards = connection.Query<Guard>(query, new { Gender = gender }).ToList();
+                    var checkQuery = "SELECT COUNT(1) FROM Guards WHERE guard_id = @guard_id";
+                    var exists = connection.ExecuteScalar<bool>(checkQuery, new { guard_id = id });
 
-                    return Ok(new { success = true, data = guards });
+                    if (!exists)
+                    {
+                        return NotFound(new { success = false, message = "Guard not found" });
+                    }
+
+                    var updateQuery = @"UPDATE Guards 
+                                        SET image_url = @Image_url, 
+                                            name = @Name, 
+                                            age = @Age, 
+                                            gender = @Gender, 
+                                            skills = @Skills, 
+                                            type = @Type, 
+                                            bio = @Bio
+                                        WHERE guard_id = @guard_id";
+
+                    var affectedRows = connection.Execute(updateQuery, new
+                    {
+                        guard_id = id,
+                        guard.Image_url,
+                        guard.Name,
+                        guard.Age,
+                        guard.Gender,
+                        guard.Skills,
+                        guard.Type,
+                        guard.Bio
+                    });
+
+                    if (affectedRows == 0)
+                    {
+                        return StatusCode(500, new { success = false, message = "Update failed" });
+                    }
+
+                    return Ok(new { success = true, message = "Guard updated successfully" });
                 }
                 catch (SqlException sqlEx)
                 {

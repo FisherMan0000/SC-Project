@@ -2,7 +2,7 @@ namespace Backend.Models
 {
     public class Guard
     {
-        public int Id { get; set; }
+        public int Guard_id { get; set; } 
         public int User_id { get; set; }
         public string Image_url { get; set; }
         public string Name { get; set; }

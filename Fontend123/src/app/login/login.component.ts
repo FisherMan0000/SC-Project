@@ -193,10 +193,10 @@ export class LoginComponent implements OnInit {
           // Check the role and navigate accordingly
           if (response.role === 'customer') {
             this.router.navigate(['/home']); // Navigate to home for customers
-          } else if (response.role === 'manager') {
+          } else if (response.role === 'Manager') {
             this.router.navigate(['/dashboard']); // Navigate to dashboard for managers
           } else {
-            this.errorMessage = 'Role not recognized';
+            this.errorMessage = 'Login failed. Please try again.';
           }
         },
         error: () => {

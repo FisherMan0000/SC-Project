@@ -1,1 +1,19 @@
-<p>bginfo works!</p>
+<h1>Guards List</h1>
+
+<!-- แสดงข้อความข้อผิดพลาดถ้ามี -->
+<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+<!-- Card Container -->
+<div class="card-container">
+  <div class="card" *ngFor="let guard of guards">
+    <img [src]="guard.image_url" alt="Guard Image" class="card-image">
+    <div class="card-body">
+      <h3>{{ guard.name }}</h3>
+      <p><strong>Age:</strong> {{ guard.age }}</p>
+      <p><strong>Gender:</strong> {{ guard.gender }}</p>
+      <p><strong>Skills:</strong> {{ guard.skills }}</p>
+      <p><strong>Type:</strong> {{ guard.type }}</p>
+    </div>
+  </div>
+</div>
+

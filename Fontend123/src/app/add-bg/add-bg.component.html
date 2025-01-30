@@ -1,1 +1,106 @@
-<p>add-bg works!</p>
+<app-sidebar></app-sidebar>
+
+<div *ngIf="true" role="bodyguard-form" aria-labelledby="add-bodyguard-form">
+  <form [formGroup]="bodyguardForm" (ngSubmit)="onAddBodyguard()" role="form" aria-labelledby="add-bodyguard-form">
+    <h1 id="add-bodyguard-form">Add Bodyguard</h1>
+
+    <!-- Image URL Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="image_url" 
+        placeholder="Image URL" 
+        required 
+        aria-describedby="imageError"
+      />
+      <div *ngIf="bodyguardForm.get('image_url')?.invalid && bodyguardForm.get('image_url')?.touched" id="imageError">
+        <small style="color: red;" role="alert">Image URL is required.</small>
+      </div>
+    </div>
+
+    <!-- Name Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="name" 
+        placeholder="Name" 
+        required 
+        aria-describedby="nameError"
+      />
+      <div *ngIf="bodyguardForm.get('name')?.invalid && bodyguardForm.get('name')?.touched" id="nameError">
+        <small style="color: red;" role="alert">Name is required.</small>
+      </div>
+    </div>
+
+    <!-- Age Field -->
+    <div class="form-group">
+      <input 
+        type="number" 
+        formControlName="age" 
+        placeholder="Age" 
+        required 
+        aria-describedby="ageError"
+      />
+      <div *ngIf="bodyguardForm.get('age')?.invalid && bodyguardForm.get('age')?.touched" id="ageError">
+        <small style="color: red;" role="alert">Age is required.</small>
+      </div>
+    </div>
+
+    <!-- Gender Field -->
+    <div class="form-group">
+      <select formControlName="gender" required aria-describedby="genderError">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <div *ngIf="bodyguardForm.get('gender')?.invalid && bodyguardForm.get('gender')?.touched" id="genderError">
+        <small style="color: red;" role="alert">Gender is required.</small>
+      </div>
+    </div>
+
+    <!-- Skills Field -->
+    <div class="form-group">
+      <input 
+        type="text" 
+        formControlName="skills" 
+        placeholder="Skills (comma separated)" 
+        required 
+        aria-describedby="skillsError"
+      />
+      <div *ngIf="bodyguardForm.get('skills')?.invalid && bodyguardForm.get('skills')?.touched" id="skillsError">
+        <small style="color: red;" role="alert">Skills are required.</small>
+      </div>
+    </div>
+
+    <!-- Type Field -->
+    <div class="form-group">
+      <select formControlName="type" required aria-describedby="typeError">
+        <option value="" disabled selected>Select Type</option>
+        <option value="Located">Located</option>
+        <option value="Unarmed">Unarmed</option>
+      </select>
+      <div *ngIf="bodyguardForm.get('type')?.invalid && bodyguardForm.get('type')?.touched" id="typeError">
+        <small style="color: red;" role="alert">Type is required.</small>
+      </div>
+    </div>
+
+    <!-- Bio Field -->
+    <div class="form-group">
+      <textarea 
+        formControlName="bio" 
+        placeholder="Bio" 
+        rows="4"
+        required 
+        aria-describedby="bioError"
+      ></textarea>
+      <div *ngIf="bodyguardForm.get('bio')?.invalid && bodyguardForm.get('bio')?.touched" id="bioError">
+        <small style="color: red;" role="alert">Bio is required.</small>
+      </div>
+    </div>
+
+    <!-- Add Bodyguard Button -->
+    <button type="submit" [disabled]="bodyguardForm.invalid" aria-label="Add new bodyguard">Add Bodyguard</button>
+
+  </form>
+</div>

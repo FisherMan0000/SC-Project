@@ -14,7 +14,7 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 })
 export class addManagerComponent implements OnInit {
   registerForm!: FormGroup;
-  isLogin: boolean = true;
+  isLogin: boolean = false;
   errorMessage: string = '';
 
   constructor(
@@ -38,7 +38,6 @@ export class addManagerComponent implements OnInit {
         address: ['', Validators.required],
         gender: ['', Validators.required],
         Dob: ['', Validators.required],
-        Role: ['Manager']
       },
       {
         validators: this.passwordMatchValidator
@@ -65,6 +64,7 @@ export class addManagerComponent implements OnInit {
         }
       });
   }
+  
 
   toggleForm(): void {
     this.isLogin = !this.isLogin;

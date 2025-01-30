@@ -1,0 +1,71 @@
+.appsettings.json
+# Build Folders
+bin/
+obj/
+
+# User-Specific Files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Logs
+*.log
+
+# Packages
+*.nupkg
+packages/
+.vscode/
+
+# Visual Studio Specific
+.vs/
+
+# Rider Specific
+.idea/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Web Project Related
+node_modules/
+bower_components/
+jspm_packages/
+wwwroot/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Coverage Files
+coverage/
+*.coverage
+*.coveragexml
+
+# Debugging
+*.pdb
+*.ilk
+
+# Publish Files
+.publish/
+
+# Temporary Files
+*.tmp
+*.temp
+
+# Database Files
+*.mdf
+*.ldf
+
+# Secrets and Keys
+*.key
+*.snk
+secrets.json
+
+# Generated Files
+*.g.*
+*.i.*
+
+# Optional: Add your own exclusions
+custom_exclude_file_or_directory/
+

@@ -10,5 +10,8 @@ namespace Backend.Data
 
         public DbSet<User> Manager { get; set; } = null!;
         public DbSet<Customer> Customers { get; set; } = null!;
+        public DbSet<Guard> Guards { get; set; } = null!;
+        public DbSet<Hiring> Hirings { get; set; } = null!;
+        public DbSet<Income> Incomes { get; set; } = null!;
     }
 }

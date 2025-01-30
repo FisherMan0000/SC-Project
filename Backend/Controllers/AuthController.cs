@@ -209,11 +209,11 @@ namespace Backend.Controllers
                         });
 
                     // Assign the UserId to the Manager and insert into Manager table
-                    manager.User_Id = userId;
+                    manager.User_id = userId;
 
                     connection.Execute(
-                        @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id) 
-                VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
+                        @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_id) 
+                VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @User_id);",
                         manager);
 
                     return Ok(new { success = true, message = "Manager added successfully" });
