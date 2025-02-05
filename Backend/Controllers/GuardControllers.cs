@@ -33,18 +33,9 @@ namespace Backend.Controllers
                 {
                     connection.Open();
 
-                    // check for manager id
-                    var checkQuery = "SELECT COUNT(1) FROM Manager WHERE User_Id = @User_id";
-                    var exists = connection.ExecuteScalar<bool>(checkQuery, new { User_id = guard.User_id });
 
-                    if (!exists)
-                    {
-                        return BadRequest(new { success = false, message = "Invalid User_id: Manager not found" });
-                    }
-
-
-                    var insertQuery = @"INSERT INTO Guards (User_id, Image_url, Name, Age, Gender, Skills, Type, Bio)
-                VALUES (@User_id, @Image_url, @Name, @Age, @Gender, @Skills, @Type, @Bio);
+                    var insertQuery = @"INSERT INTO Guards (Image_url, Name, Age, Gender, Skills, Type, Bio, Price)
+                VALUES (@Image_url, @Name, @Age, @Gender, @Skills, @Type, @Bio, @Price);
                 SELECT CAST(SCOPE_IDENTITY() as int);";
 
                     var id = connection.QuerySingle<int>(insertQuery, guard);
