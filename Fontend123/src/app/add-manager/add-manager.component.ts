@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 
@@ -10,7 +10,7 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
   templateUrl: './add-manager.component.html',
   styleUrls: ['./add-manager.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, SidebarComponent]
+  imports: [ReactiveFormsModule, CommonModule, SidebarComponent]
 })
 export class addManagerComponent implements OnInit {
   registerForm!: FormGroup;

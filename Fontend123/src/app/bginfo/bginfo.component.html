@@ -1,9 +1,9 @@
-<h1>Guards List</h1>
+<!-- <h1>Guards List</h1>
 
-<!-- แสดงข้อความข้อผิดพลาดถ้ามี -->
+
 <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
-<!-- Card Container -->
+
 <div class="card-container">
   <div class="card" *ngFor="let guard of guards">
     <img [src]="guard.image_url" alt="Guard Image" class="card-image">
@@ -15,5 +15,64 @@
       <p><strong>Type:</strong> {{ guard.type }}</p>
     </div>
   </div>
+</div> -->
+
+<h1>Guards List</h1>
+
+<!-- แสดงข้อความข้อผิดพลาดถ้ามี -->
+<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+<!-- Card Container -->
+<div class="card-container">
+  <div class="card" *ngFor="let guard of guards">
+    <img [src]="guard.image_url || 'assets/default-guard.png'" alt="Guard Image" class="card-image">
+    <div class="card-body">
+      <h3>{{ guard.name }}</h3>
+      <p><strong>Age:</strong> {{ guard.age }}</p>
+      <p><strong>Gender:</strong> {{ guard.gender }}</p>
+      <p><strong>Skills:</strong> {{ guard.skills }}</p>
+      <p><strong>Type:</strong> {{ guard.type }}</p>
+      <p><strong>Price:</strong> {{ guard.price }}</p>
+
+      <!-- ปุ่ม Edit -->
+      <button (click)="editGuard(guard)">Edit</button>
+    </div>
+  </div>
 </div>
+
+<!-- Popup Modal -->
+<div class="modal-overlay" *ngIf="editingGuard">
+  <div class="modal-content">
+    <span class="close-btn" (click)="cancelEdit()">&times;</span>
+    <h2>Edit Guard</h2>
+    <div class="form-group">
+      <label>Name:</label>
+      <input type="text" [(ngModel)]="editingGuard.name">
+    </div>
+    <div class="form-group">
+      <label>Age:</label>
+      <input type="number" [(ngModel)]="editingGuard.age">
+    </div>
+    <div class="form-group">
+      <label>Gender:</label>
+      <input type="text" [(ngModel)]="editingGuard.gender">
+    </div>
+    <div class="form-group">
+      <label>Skills:</label>
+      <input type="text" [(ngModel)]="editingGuard.skills">
+    </div>
+    <div class="form-group">
+      <label>Type:</label>
+      <input type="text" [(ngModel)]="editingGuard.type">
+    </div>
+    <div class="form-group">
+      <label>Price:</label>
+      <input type="number" [(ngModel)]="editingGuard.price" step="0.01" />
+    </div>
+    <div class="modal-buttons">
+      <button class="save-btn" (click)="updateGuard()">Save</button>
+      <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+    </div>
+</div>
+
 

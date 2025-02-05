@@ -1,21 +1,88 @@
+<!-- <nav>
+  <div class="container">
+      <div class="row">
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/home">
+                  <i class="fas fa-home"></i> Home
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/guard">
+                  <i class="fas fa-user-shield"></i> Guard
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/about">
+                  <i class="fas fa-info-circle"></i> About Us
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/contact">
+                  <i class="fas fa-phone-alt"></i> Contact Us
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/login">
+                  <i class="fas fa-sign-in-alt"></i> Login
+              </button>
+          </div>
+      </div>
+  </div>
+</nav> -->
+
 <nav>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <button type="button" class="btn btn-primary" routerLink="/home">Home</button>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-primary" routerLink="/guard">Guard</button>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-primary" routerLink="/about">About Us</button>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-primary" routerLink="/contact">Contact Us</button>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-primary" routerLink="/login">Login</button>
-            </div>
-        </div>
-    </div>
+  <div class="container">
+      <div class="row">
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/home">
+                <i class="fas fa-home"></i>  Home
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/guard">
+                <i class="fas fa-user-shield"></i> Guard
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/about">
+                <i class="fas fa-info-circle"></i> About Us
+              </button>
+          </div>
+          <div class="col">
+              <button type="button" class="btn btn-primary" routerLink="/contact">
+                <i class="fas fa-phone-alt"></i> Contact Us
+              </button>
+          </div>
+
+          <!-- Dropdown สำหรับผู้ใช้ที่ล็อกอิน -->
+          <div class="col" *ngIf="isLoggedIn">
+              <div class="dropdown">
+                  <button type="button" class="btn btn-primary dropdown-toggle" (click)="toggleDropdown()">
+                      <i class="fas fa-user-circle"></i>
+                  </button>
+                  <div class="dropdown-menu" *ngIf="showDropdown">
+                      <a class="dropdown-item" routerLink="/profile">
+                          <i class="fas fa-user"></i> Profile
+                      </a>
+                      <a class="dropdown-item" routerLink="/job-details">
+                          <i class="fas fa-briefcase"></i> Job Details
+                      </a>
+                      <hr />
+                      <a class="dropdown-item" (click)="logout()">
+                          <i class="fas fa-sign-out-alt"></i> Logout
+                      </a>
+                  </div>
+              </div>
+          </div>
+
+          <!-- ปุ่ม Login เมื่อไม่ได้ล็อกอิน -->
+          <div class="col" *ngIf="!isLoggedIn">
+              <button type="button" class="btn btn-primary" routerLink="/login">
+                <i class="fas fa-sign-in-alt"></i> Login
+              </button>
+          </div>
+      </div>
+  </div>
 </nav>
+
+

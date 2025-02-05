@@ -118,13 +118,12 @@
 // }
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -134,7 +133,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    HttpClientModule
+
   ]
 })
 export class LoginComponent implements OnInit {
@@ -147,7 +146,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object // ✅ Inject PLATFORM_ID เพื่อตรวจสอบว่าอยู่ใน Browser หรือไม่
   ) {}
 
   ngOnInit(): void {
@@ -171,9 +171,11 @@ export class LoginComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
       },
       {
-        validators: this.passwordMatchValidator // Custom validator for password match
+        validators: this.passwordMatchValidator, // ✅ ใช้ฟังก์ชัน passwordMatchValidator
+        updateOn: 'blur' // ✅ ตรวจสอบค่าเมื่อออกจากช่อง Input
       }
     );
+    
   }
 
   // Login function with role checking
@@ -182,27 +184,33 @@ export class LoginComponent implements OnInit {
       this.errorMessage = 'Please fill out the form correctly.';
       return;
     }
-
+  
     const loginData = this.loginForm.value;
-    this.http.post<{ token: string, role: string }>('http://localhost:5253/api/Auth/login', loginData)
-      .subscribe({
-        next: (response) => {
-          // Store the token in localStorage
+  
+    this.http.post<{ token: string, role: string }>(
+      'http://localhost:5253/api/Auth/login',
+      loginData,
+      { headers: { 'Content-Type': 'application/json' } } // ✅ เพิ่ม Headers
+    ).subscribe({
+      next: (response) => {
+        if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('token', response.token);
-
-          // Check the role and navigate accordingly
-          if (response.role === 'customer') {
-            this.router.navigate(['/home']); // Navigate to home for customers
-          } else if (response.role === 'Manager') {
-            this.router.navigate(['/dashboard']); // Navigate to dashboard for managers
-          } else {
-            this.errorMessage = 'Login failed. Please try again.';
-          }
-        },
-        error: () => {
-          this.errorMessage = 'Invalid username or password.';
         }
-      });
+  
+        if (response.role === 'Customer') {
+          this.router.navigate(['/home']);
+        } else if (response.role === 'Manager') {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Invalid username or password.';
+      }
+    });
+
   }
 
   // Register function
@@ -240,9 +248,14 @@ export class LoginComponent implements OnInit {
   }
 
   // Password match validator
-  passwordMatchValidator(formGroup: FormGroup): { [key: string]: boolean } | null {
-    const password = formGroup.get('password')?.value;
-    const confirmPassword = formGroup.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordMismatch: true };
-  }
+  passwordMatchValidator = (formGroup: FormGroup): void => {
+    const password = formGroup.get('password');
+    const confirmPassword = formGroup.get('confirmPassword');
+  
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
+      confirmPassword.setErrors({ passwordMismatch: true }); // ✅ ใช้ setErrors()
+    } else {
+      confirmPassword?.setErrors(null);
+    }
+  };
 }

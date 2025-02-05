@@ -1,74 +1,111 @@
-/* Sidebar Styles */
-.d-flex {
-    display: flex;
-}
-
-nav {
-    width: 250px; /* Set the sidebar width */
-    height: 100vh; /* Full height of the viewport */
-    background-color: #f8f9fa; /* Light background for the sidebar */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+/* --- Sidebar Base Style --- */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    position: fixed; /* Fixed sidebar on the left */
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensures sidebar is above other content */
+    z-index: 1000;
+    transition: width 0.3s ease-in-out;
+    overflow-x: hidden;
+}
+
+/* --- Collapsed Sidebar --- */
+.sidebar.collapsed {
+    width: 60px;
+    padding: 10px;
+}
+
+/* --- Nav List Style Fix --- */
+.nav {
+    padding-left: 0; /* ลบ Padding ที่มากเกินไป */
+    list-style: none; /* ลบจุดหน้าข้อความ */
 }
 
 .nav-item {
-    margin-bottom: 1rem; /* Space between the menu items */
+    margin-bottom: 10px;
+    white-space: nowrap;
 }
 
+/* --- Sidebar Menu Items --- */
 .nav-link {
-    display: block; /* Makes the entire area clickable */
-    padding: 12px 20px; /* Padding around the text */
-    border-radius: 5px; /* Rounded corners */
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
     font-size: 16px;
     font-weight: 500;
-    color: #007bff; /* Primary color for text */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover transition */
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.nav-link:hover,
-.nav-link.active {
-    background-color: #007bff; /* Background on hover or active state */
-    color: #fff; /* Change text color when active or hovered */
-    transform: scale(1.05); /* Slightly enlarge the button on hover */
+/* --- Icon Adjustments --- */
+.nav-link i {
+    margin-right: 10px;
+    font-size: 18px;
 }
 
-.nav-link:focus {
-    outline: none; /* Remove default focus outline */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add custom focus effect */
+/* --- Hide Text When Sidebar is Collapsed --- */
+.sidebar.collapsed .nav-link span {
+    display: none; /* ซ่อนข้อความเมื่อ Sidebar ถูกพับ */
 }
 
-.text-start {
-    text-align: left; /* Ensure text is aligned to the left */
+/* --- Adjust Icon Centering in Collapsed Mode --- */
+.sidebar.collapsed .nav-link i {
+    margin-right: 0;
+    font-size: 22px;
+    text-align: center;
+    width: 100%;
 }
 
-.w-100 {
-    width: 100%; /* Make sure the links span the full width of the sidebar */
+/* --- Toggle Button Styling --- */
+.toggle-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Content Area */
-.flex-grow-1 {
+/* --- Adjusted Toggle Button for Collapsed Mode --- */
+.sidebar.collapsed .toggle-btn {
+    text-align: center;
+}
+
+/* --- Content Area Adjustments --- */
+.content {
     flex-grow: 1;
-    margin-left: 250px; /* Offset the content from the sidebar */
+    margin-left: 250px;
     padding: 20px;
+    transition: margin-left 0.3s ease-in-out;
 }
 
+/* --- Adjust Content When Sidebar is Collapsed --- */
+.sidebar.collapsed + .content {
+    margin-left: 60px;
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 768px) {
-    /* For small screens, make the sidebar collapsible */
-    nav {
-        position: relative;
+    .sidebar {
         width: 100%;
         height: auto;
+        position: relative;
     }
 
-    .flex-grow-1 {
-        margin-left: 0; /* Remove the margin for small screens */
+    .sidebar.collapsed {
+        width: 100%;
     }
 
-    .d-flex {
-        flex-direction: column;
+    .content {
+        margin-left: 0;
     }
 }

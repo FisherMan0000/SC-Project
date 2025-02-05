@@ -85,6 +85,21 @@
       </div>
     </div>
 
+    <div class="form-group">
+      
+      <input 
+        formControlName="price" 
+        placeholder="Price" 
+        required 
+        aria-describedby="ageError"
+        type="number" 
+        step="0.01" 
+        />
+      <div *ngIf="bodyguardForm.get('price')?.invalid && bodyguardForm.get('price')?.touched" id="typeError">
+        <small style="color: red;" role="alert">Type is required.</small>
+      </div>
+    </div>
+
     <!-- Bio Field -->
     <div class="form-group">
       <textarea 

@@ -92,7 +92,8 @@ export class AddBGComponent implements OnInit {
       gender: ['', Validators.required],
       skills: ['', Validators.required],
       type: ['', Validators.required],
-      bio: ['', Validators.required]
+      bio: ['', Validators.required],
+      price: ['', [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
   }
 
@@ -101,15 +102,17 @@ export class AddBGComponent implements OnInit {
       this.errorMessage = 'Please fill out the form correctly.';
       return;
     }
-
-    const bodyguardData = this.bodyguardForm.value;
-
-    // สร้าง HTTP Headers และเพิ่ม Token
+  
+    const bodyguardData = {
+      ...this.bodyguardForm.value,
+      price: parseFloat(this.bodyguardForm.value.price).toFixed(2) // ✅ แปลงเป็นทศนิยม 2 ตำแหน่ง
+    };
+  
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.token}` // ส่ง Token ไปกับ Request
+      'Authorization': `Bearer ${this.token}`
     });
-
+  
     this.http.post('http://localhost:5253/api/Guard', bodyguardData, { headers })
       .subscribe({
         next: () => {
@@ -120,12 +123,13 @@ export class AddBGComponent implements OnInit {
           console.error('Error:', err);
           if (err.status === 401) {
             this.errorMessage = 'Unauthorized. Please log in again.';
-            this.router.navigate(['/login']); // ส่งกลับไปหน้า Login ถ้า Token หมดอายุ
+            this.router.navigate(['/login']);
           } else {
             this.errorMessage = 'Failed to add bodyguard. Please try again.';
           }
         }
       });
   }
+  
 }
 

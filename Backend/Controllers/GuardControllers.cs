@@ -19,40 +19,52 @@ namespace Backend.Controllers
 
         // POST --> api/Guard
         [HttpPost]
-        public IActionResult AddGuard([FromBody] Guard guard)
+public IActionResult AddGuard([FromBody] Guard guard)
+{
+    if (guard == null || string.IsNullOrEmpty(guard.Name))
+    {
+        return BadRequest(new { success = false, message = "Invalid input" });
+    }
+
+    var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+    using (var connection = new SqlConnection(connectionString))
+    {
+        try
         {
-            if (guard == null || string.IsNullOrEmpty(guard.Name))
+            connection.Open();
+
+            var insertQuery = @"INSERT INTO Guards (image_url, name, age, gender, skills, type, bio, price)
+                                VALUES (@Image_url, @Name, @Age, @Gender, @Skills, @Type, @Bio, @Price);
+                                SELECT CAST(SCOPE_IDENTITY() as int);";
+
+            var guardId = connection.QuerySingle<int>(insertQuery, new
             {
-                return BadRequest(new { success = false, message = "Invalid input" });
-            }
+                guard.Image_url,
+                guard.Name,
+                guard.Age,
+                guard.Gender,
+                guard.Skills,
+                guard.Type,
+                guard.Bio,
+                Price = Math.Round(guard.Price, 2) // ✅ ป้องกันค่าทศนิยมเกิน 2 ตำแหน่ง
+            });
 
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            guard.Guard_id = guardId;
 
-            using (var connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    var insertQuery = @"INSERT INTO Guards (image_url, name, age, gender, skills, type, bio)
-                                        VALUES (@Image_url, @Name, @Age, @Gender, @Skills, @Type, @Bio);
-                                        SELECT CAST(SCOPE_IDENTITY() as int);";
-
-                    var guardId = connection.QuerySingle<int>(insertQuery, guard);
-                    guard.Guard_id = guardId;
-
-                    return Ok(new { success = true, message = "Guard added successfully", guard });
-                }
-                catch (SqlException sqlEx)
-                {
-                    return StatusCode(500, new { success = false, message = "Database error", details = sqlEx.Message });
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, new { success = false, message = "Internal server error", details = ex.Message });
-                }
-            }
+            return Ok(new { success = true, message = "Guard added successfully", guard });
         }
+        catch (SqlException sqlEx)
+        {
+            return StatusCode(500, new { success = false, message = "Database error", details = sqlEx.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Internal server error", details = ex.Message });
+        }
+    }
+}
+
 
         // GET --> api/Guard
         [HttpGet]
@@ -94,7 +106,7 @@ namespace Backend.Controllers
                 {
                     connection.Open();
 
-                    var query = "SELECT guard_id , image_url, name, age, gender, skills, type, bio FROM Guards WHERE guard_id = @guard_id";
+                    var query = "SELECT guard_id , image_url, name, age, gender, skills, type, bio, price FROM Guards WHERE guard_id = @guard_id";
                     var guard = connection.QueryFirstOrDefault<Guard>(query, new { guard_id = id });
 
                     if (guard == null)
@@ -116,68 +128,71 @@ namespace Backend.Controllers
         }
 
         // PUT --> api/Guard/{id}
-        [HttpPut("{id}")]
-        public IActionResult UpdateGuard(int id, [FromBody] Guard guard)
+[HttpPut("{id}")]
+public IActionResult UpdateGuard(int id, [FromBody] Guard guard)
+{
+    if (guard == null || string.IsNullOrEmpty(guard.Name))
+    {
+        return BadRequest(new { success = false, message = "Invalid input" });
+    }
+
+    var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+    using (var connection = new SqlConnection(connectionString))
+    {
+        try
         {
-            if (guard == null || string.IsNullOrEmpty(guard.Name))
+            connection.Open();
+
+            var checkQuery = "SELECT COUNT(1) FROM Guards WHERE guard_id = @guard_id";
+            var exists = connection.ExecuteScalar<bool>(checkQuery, new { guard_id = id });
+
+            if (!exists)
             {
-                return BadRequest(new { success = false, message = "Invalid input" });
+                return NotFound(new { success = false, message = "Guard not found" });
             }
 
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var updateQuery = @"UPDATE Guards 
+                                SET image_url = @Image_url, 
+                                    name = @Name, 
+                                    age = @Age, 
+                                    gender = @Gender, 
+                                    skills = @Skills, 
+                                    type = @Type, 
+                                    bio = @Bio,
+                                    price = @Price
+                                WHERE guard_id = @guard_id";
 
-            using (var connection = new SqlConnection(connectionString))
+            var affectedRows = connection.Execute(updateQuery, new
             {
-                try
-                {
-                    connection.Open();
+                guard_id = id,
+                guard.Image_url,
+                guard.Name,
+                guard.Age,
+                guard.Gender,
+                guard.Skills,
+                guard.Type,
+                guard.Bio,
+                Price = Math.Round(guard.Price, 2) // ✅ ป้องกันค่าทศนิยมเกิน 2 ตำแหน่ง
+            });
 
-                    var checkQuery = "SELECT COUNT(1) FROM Guards WHERE guard_id = @guard_id";
-                    var exists = connection.ExecuteScalar<bool>(checkQuery, new { guard_id = id });
-
-                    if (!exists)
-                    {
-                        return NotFound(new { success = false, message = "Guard not found" });
-                    }
-
-                    var updateQuery = @"UPDATE Guards 
-                                        SET image_url = @Image_url, 
-                                            name = @Name, 
-                                            age = @Age, 
-                                            gender = @Gender, 
-                                            skills = @Skills, 
-                                            type = @Type, 
-                                            bio = @Bio
-                                        WHERE guard_id = @guard_id";
-
-                    var affectedRows = connection.Execute(updateQuery, new
-                    {
-                        guard_id = id,
-                        guard.Image_url,
-                        guard.Name,
-                        guard.Age,
-                        guard.Gender,
-                        guard.Skills,
-                        guard.Type,
-                        guard.Bio
-                    });
-
-                    if (affectedRows == 0)
-                    {
-                        return StatusCode(500, new { success = false, message = "Update failed" });
-                    }
-
-                    return Ok(new { success = true, message = "Guard updated successfully" });
-                }
-                catch (SqlException sqlEx)
-                {
-                    return StatusCode(500, new { success = false, message = "Database error", details = sqlEx.Message });
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, new { success = false, message = "Internal server error", details = ex.Message });
-                }
+            if (affectedRows == 0)
+            {
+                return StatusCode(500, new { success = false, message = "Update failed" });
             }
+
+            return Ok(new { success = true, message = "Guard updated successfully" });
         }
+        catch (SqlException sqlEx)
+        {
+            return StatusCode(500, new { success = false, message = "Database error", details = sqlEx.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { success = false, message = "Internal server error", details = ex.Message });
+        }
+    }
+}
+
     }
 }

@@ -11,5 +11,6 @@ namespace Backend.Models
         public string Skills { get; set; }
         public string Type { get; set; }
         public string Bio { get; set; }
+        public decimal Price { get; set; }  // ต้องเป็น decimal
     }
 }

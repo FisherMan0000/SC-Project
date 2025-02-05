@@ -1,0 +1,57 @@
+<h1>Available Guards</h1>
+
+<!-- แสดงข้อความข้อผิดพลาดถ้ามี -->
+<p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+<!-- ถ้า guards ไม่มีข้อมูล ไม่ต้องแสดง Card -->
+<div class="card-container" *ngIf="guards.length > 0">
+  <div class="card" *ngFor="let guard of guards">
+    <img [src]="guard.image_url || 'assets/default-guard.png'" alt="Guard Image" class="card-image">
+    <div class="card-body">
+      <h3>{{ guard.name }}</h3>
+      <p><strong>Age:</strong> {{ guard.age }}</p>
+      <p><strong>Gender:</strong> {{ guard.gender }}</p>
+      <p><strong>Skills:</strong> {{ guard.skills }}</p>
+      <p><strong>Type:</strong> {{ guard.type }}</p>
+      <p><strong>Price:</strong> {{ guard.price | number:'1.2-2' }} per day</p>
+      
+      <!-- ปุ่มจ้างงาน -->
+      <button class="btn btn-primary" (click)="openHireForm(guard)">Hire</button>
+    </div>
+  </div>
+</div>
+
+<!-- ข้อความแจ้งเตือนถ้าไม่มีข้อมูล -->
+<p *ngIf="guards.length === 0 && !errorMessage">No guards available.</p>
+
+<!-- ✅ Modal ฟอร์มจ้างงาน -->
+<!-- ✅ Modal Overlay -->
+<!-- ✅ Modal ฟอร์มจ้างงาน -->
+<div class="modal-overlay" *ngIf="selectedGuard">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Hire {{ selectedGuard.name }}</h2>
+      <button class="close-btn" (click)="cancelHire()">✖</button>
+    </div>
+
+    <div class="modal-body">
+      <label>Start Date:</label>
+      <input type="date" [(ngModel)]="hireData.startDate" (change)="calculateTotalPrice()" required>
+
+      <label>End Date:</label>
+      <input type="date" [(ngModel)]="hireData.endDate" (change)="calculateTotalPrice()" required>
+
+      <!-- ✅ แสดงจำนวนวันที่เลือก -->
+      <p><strong>Total Days:</strong> {{ totalDays }} days</p>
+
+      <!-- ✅ แสดงราคาทั้งหมด -->
+      <p class="total-price"><strong>Total Price:</strong> {{ totalPrice | number:'1.2-2' }}</p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-success" (click)="submitHireRequest()">Hire</button>
+    </div>
+
+    <p *ngIf="hireMessage" class="success">{{ hireMessage }}</p>
+  </div>
+</div>

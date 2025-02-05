@@ -11,5 +11,9 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
+  isCollapsed = false; // ตัวแปรควบคุม Sidebar
 
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed; // สลับสถานะเปิด/ปิด Sidebar
+  }
 }
