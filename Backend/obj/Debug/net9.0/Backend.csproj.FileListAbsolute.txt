@@ -710,3 +710,8 @@ C:\WebAppDev\MyAngularDotNetApp\SC-Project\Backend\obj\Debug\net9.0\refint\Backe
 C:\WebAppDev\MyAngularDotNetApp\SC-Project\Backend\obj\Debug\net9.0\Backend.pdb
 C:\WebAppDev\MyAngularDotNetApp\SC-Project\Backend\obj\Debug\net9.0\Backend.genruntimeconfig.cache
 C:\WebAppDev\MyAngularDotNetApp\SC-Project\Backend\obj\Debug\net9.0\ref\Backend.dll
+C:\Users\watta\angular-projects\TestNET\SC-Project\Backend\obj\Debug\net9.0\Backend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\watta\angular-projects\TestNET\SC-Project\Backend\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Users\watta\angular-projects\TestNET\SC-Project\Backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\watta\angular-projects\TestNET\SC-Project\Backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\watta\angular-projects\TestNET\SC-Project\Backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
