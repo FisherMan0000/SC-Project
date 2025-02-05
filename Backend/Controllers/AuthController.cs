@@ -87,11 +87,11 @@ namespace Backend.Controllers
                 // Handle role-based login
                 if (user.Role == "Manager")
                 {
-                    return Ok(new { success = true, role = "Manager", message = "Manager login successful", token });
+                    return Ok(new { success = true, role = "Manager",Id = user.Id, message = "Manager login successful", token });
                 }
                 else if (user.Role == "Customer")
                 {
-                    return Ok(new { success = true, role = "Customer", message = "Customer login successful", token });
+                    return Ok(new { success = true, role = "Customer",Id = user.Id, message = "Customer login successful", token });
                 }
                 else
                 {
