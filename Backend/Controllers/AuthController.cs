@@ -65,7 +65,7 @@ namespace Backend.Controllers
 
                 // Query to fetch user details based on the username
                 var user = connection.QueryFirstOrDefault<User>(
-                    @"SELECT u.username, u.password, u.role 
+                    @"SELECT u.username, u.password, u.role, u.Id
               FROM Users u 
               WHERE u.username = @Username",
                     new { Username = loginRequest.Username });
@@ -87,11 +87,11 @@ namespace Backend.Controllers
                 // Handle role-based login
                 if (user.Role == "Manager")
                 {
-                    return Ok(new { success = true, role = "Manager",Id = user.Id, message = "Manager login successful", token });
+                    return Ok(new { success = true, role = "Manager", Id = user.Id, message = "Manager login successful", token });
                 }
                 else if (user.Role == "Customer")
                 {
-                    return Ok(new { success = true, role = "Customer",Id = user.Id, message = "Customer login successful", token });
+                    return Ok(new { success = true, role = "Customer", Id = user.Id, message = "Customer login successful", token });
                 }
                 else
                 {
@@ -209,11 +209,11 @@ namespace Backend.Controllers
                         });
 
                     // Assign the UserId to the Manager and insert into Manager table
-                    manager.User_id = userId;
+                    manager.User_Id = userId;
 
                     connection.Execute(
-                        @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_id) 
-                  VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @User_id);",
+                        @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id) 
+                  VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
                         manager);
 
                     return Ok(new { success = true, message = "Manager added successfully" });
