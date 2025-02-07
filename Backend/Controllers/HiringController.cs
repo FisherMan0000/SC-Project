@@ -115,5 +115,46 @@ namespace Backend.Controllers
                 return count > 0;
             }
         }
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAllHiringInfo()
+        {
+            var query = @"
+                SELECT 
+                    h.Hiring_id, 
+                    c.Name AS CustomerName, 
+                    g.Name AS GuardName, 
+                    h.Price, 
+                    h.Start_date, 
+                    h.End_date
+                FROM Hiring h
+                INNER JOIN Customer c ON h.Customer_id = c.Id
+                INNER JOIN Guards g ON h.Guard_id = g.Guard_id";
+
+            var hiringList = new List<object>();
+
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var command = new SqlCommand(query, connection))
+            {
+                await connection.OpenAsync();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        hiringList.Add(new
+                        {
+                            Hiring_id = reader.GetInt32(reader.GetOrdinal("Hiring_id")),
+                            CustomerName = reader.GetString(reader.GetOrdinal("CustomerName")),
+                            GuardName = reader.GetString(reader.GetOrdinal("GuardName")),
+                            Price = reader.IsDBNull(reader.GetOrdinal("Price")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Price")),
+                            Start_date = reader.IsDBNull(reader.GetOrdinal("Start_date")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("Start_date")),
+                            End_date = reader.IsDBNull(reader.GetOrdinal("End_date")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("End_date"))
+                        });
+                    }
+                }
+            }
+
+            return Ok(hiringList);
+        }
     }
 }
+
