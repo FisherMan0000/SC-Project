@@ -156,6 +156,38 @@ namespace Backend.Controllers
             }
         }
 
+        [HttpGet("AllIncome")]
+        public async Task<ActionResult<IEnumerable<object>>> GetAllIncomeInfo()
+        {
+            var query = @"
+            SELECT Income.income_id, Income.payment_date, Income.amount
+            FROM   Hiring INNER JOIN
+            Income ON Hiring.hiring_id = Income.hiring_id";
+
+            var IncomeList = new List<object>();
+
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var command = new SqlCommand(query, connection))
+            {
+                await connection.OpenAsync();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        IncomeList.Add(new
+                        {
+                            Income_id = reader.GetInt32(reader.GetOrdinal("Income_id")),
+                            Payment_date = reader.GetDateTime(reader.GetOrdinal("Payment_date")),
+                            Amount = reader.IsDBNull(reader.GetOrdinal("Amount")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("Amount"))
+                        });
+                    }
+                }
+            }
+            return Ok(IncomeList);
+        }
+
+
+
         // Helper Method: Check if Record Exists
         private async Task<bool> RecordExists(string tableName, string columnName, int id)
         {
