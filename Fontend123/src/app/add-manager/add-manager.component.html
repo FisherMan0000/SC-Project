@@ -2,7 +2,16 @@
 
 <div *ngIf="true" role="manager" aria-labelledby="register-form">
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()" role="form" aria-labelledby="register-form">
+    
     <h1 id="register-form">Register</h1>
+    
+    <!-- Hidden Input to Show User ID -->
+<input type="hidden" [value]="userId" />
+
+<!-- Alert Message ถ้าไม่มี User ID -->
+<div *ngIf="!userId" class="alert alert-danger">
+  ⚠️ Error: User ID is missing. Please log in again.
+</div>
 
     <!-- Name Field -->
     <div class="form-group">
@@ -78,12 +87,12 @@
     <div class="form-group">
       <input 
         type="text" 
-        formControlName="PhoneNo" 
+        formControlName="phoneNo" 
         placeholder="Phone Number" 
         required 
         aria-describedby="phoneError"
       />
-      <div *ngIf="registerForm.get('PhoneNo')?.invalid && registerForm.get('PhoneNo')?.touched" id="phoneError">
+      <div *ngIf="registerForm.get('phoneNo')?.invalid && registerForm.get('phoneNo')?.touched" id="phoneError">
         <small style="color: red;" role="alert">Phone Number is required.</small>
       </div>
     </div>
@@ -120,20 +129,15 @@
     <div class="form-group">
       <input 
         type="date" 
-        formControlName="Dob" 
+        formControlName="dob" 
         placeholder="Date of Birth" 
         required 
         aria-describedby="dobError"
       />
-      <div *ngIf="registerForm.get('Dob')?.invalid && registerForm.get('Dob')?.touched" id="dobError">
+      <div *ngIf="registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched" id="dobError">
         <small style="color: red;" role="alert">Date of Birth is required.</small>
       </div>
     </div>
 
     <!-- Register Button -->
     <button type="submit" [disabled]="registerForm.invalid" aria-label="Register to create an account">Register</button>
-
-    <!-- Button to toggle to Login Form -->
-    <button type="button" (click)="toggleForm()" aria-label="Switch to Login">Go to Login</button>
-  </form>
-</div>

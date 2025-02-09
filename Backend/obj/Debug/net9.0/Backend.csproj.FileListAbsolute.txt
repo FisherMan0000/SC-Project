@@ -468,3 +468,8 @@ d:\SC\SC-Project-1\Backend\obj\Debug\net9.0\refint\Backend.dll
 d:\SC\SC-Project-1\Backend\obj\Debug\net9.0\Backend.pdb
 d:\SC\SC-Project-1\Backend\obj\Debug\net9.0\Backend.genruntimeconfig.cache
 d:\SC\SC-Project-1\Backend\obj\Debug\net9.0\ref\Backend.dll
+d:\SC\SC-Project-1\Backend\obj\Debug\net9.0\Backend.MvcApplicationPartsAssemblyInfo.cs
+d:\SC\SC-Project-1\Backend\bin\Debug\net9.0\Microsoft.OpenApi.dll
+d:\SC\SC-Project-1\Backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+d:\SC\SC-Project-1\Backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+d:\SC\SC-Project-1\Backend\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

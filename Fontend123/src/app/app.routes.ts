@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { ContactusComponent } from './contactus/contactus.component'; 
 import { DashBoardComponent } from './dash-board/dash-board.component';
-import { addManagerComponent } from './add-manager/add-manager.component';
+import { AddManagerComponent } from './add-manager/add-manager.component';
 import { AddBGComponent } from './add-bg/add-bg.component';
 import { RevenuesComponent } from './revenues/revenues.component';
 import { ServiceInfoComponent } from './service-info/service-info.component';
@@ -22,7 +22,7 @@ export const routes: Routes = [
     { path: 'contact', component: ContactusComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'dashboard', component: DashBoardComponent },
-    { path: 'add-manager', component: addManagerComponent},
+    { path: 'add-manager', component: AddManagerComponent},
     {path: 'addbg', component: AddBGComponent},
     {path: 'revenue', component: RevenuesComponent},
     {path: 'serviceinfo', component: ServiceInfoComponent},

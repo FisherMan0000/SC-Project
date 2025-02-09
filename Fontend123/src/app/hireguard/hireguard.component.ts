@@ -4,15 +4,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-interface Guard {
-  id: number;
-  name: string;
-  age: number;
-  gender: string;
-  skills: string;
-  type: string;
-  price: number;
-  image_url?: string;
+interface Hiring {
+  guard_id: number;
+  customer_id?: number;
+  price?: number;
+  start_date: string;
+  end_date: string;
 }
 
 @Component({
@@ -23,31 +20,46 @@ interface Guard {
   styleUrl: './hireguard.component.css'
 })
 export class HireguardComponent implements OnInit {
-  guards: Guard[] = [];
+  guards: any[] = [];
   errorMessage: string = '';
-  selectedGuard: Guard | null = null;  
-  hireMessage: string = '';  
+  selectedGuard: any | null = null;
+  hireMessage: string = '';
   totalPrice: number = 0;
-  totalDays: number = 0;  // ✅ เพิ่มตัวแปรนับจำนวนวัน
+  totalDays: number = 0;
+  customerId: number | null = null;
 
   hireData = {
-    startDate: '',
-    endDate: ''
+    start_date: '',
+    end_date: ''
   };
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.getAllGuards();
+    this.loadCustomerId();
+  }
+
+  loadCustomerId(): void {
+    const id = localStorage.getItem('id');
+    this.customerId = id ? parseInt(id, 10) : null;
+    if (!this.customerId) {
+      console.warn('⚠️ No customer ID found in localStorage');
+    } else {
+      console.log('✅ Customer ID loaded:', this.customerId);
+    }
   }
 
   getAllGuards(): void {
     this.http.get<any>('http://localhost:5253/api/Guard').subscribe({
       next: (response) => {
         if (response && Array.isArray(response.data)) {
-          this.guards = response.data;
+          this.guards = response.data.map((guard: any) => ({
+            ...guard,
+            guard_id: guard.guard_id ?? guard.id
+          }));
         } else {
-          console.error('Unexpected API response format:', response);
+          console.error('Unexpected API format:', response);
           this.guards = [];
         }
       },
@@ -58,71 +70,78 @@ export class HireguardComponent implements OnInit {
     });
   }
 
-  // ✅ เปิดฟอร์มจ้างงาน
-  openHireForm(guard: Guard): void {
+  openHireForm(guard: any): void {
+    if (!guard.guard_id) {
+      console.error('Error: guard_id is missing!', guard);
+      return;
+    }
     this.selectedGuard = guard;
     this.hireMessage = '';
     this.totalPrice = 0;
-    this.totalDays = 0; // รีเซ็ตค่าจำนวนวัน
-    this.hireData.startDate = '';
-    this.hireData.endDate = '';
+    this.totalDays = 0;
+    this.hireData.start_date = '';
+    this.hireData.end_date = '';
   }
 
-  // ✅ คำนวณจำนวนวันและราคาทั้งหมด
   calculateTotalPrice(): void {
-    if (this.hireData.startDate && this.hireData.endDate) {
-      const start = new Date(this.hireData.startDate);
-      const end = new Date(this.hireData.endDate);
-      const timeDiff = end.getTime() - start.getTime();
-      const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-      if (days > 0) {
-        this.totalDays = days; // ✅ เก็บจำนวนวันที่คำนวณได้
-        this.totalPrice = days * (this.selectedGuard?.price || 0);
-      } else {
+    if (this.hireData.start_date && this.hireData.end_date) {
+      const start = new Date(this.hireData.start_date);
+      const end = new Date(this.hireData.end_date);
+      if (end <= start) {
+        this.hireMessage = 'End date must be after start date!';
         this.totalDays = 0;
         this.totalPrice = 0;
+        return;
       }
+      this.totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 3600 * 24));
+      this.totalPrice = this.totalDays * (this.selectedGuard?.price || 0);
     }
   }
 
-  // ✅ ส่งคำขอจ้างงานไปยัง API
   submitHireRequest(): void {
-    if (!this.hireData.startDate || !this.hireData.endDate) {
+    if (!this.hireData.start_date || !this.hireData.end_date) {
       this.hireMessage = 'Please select valid dates.';
+      console.error('❌ Error: start_date or end_date is missing!');
       return;
     }
-  
-    const customerId = localStorage.getItem('Customer_id'); // ✅ ดึง customerId
-  
-    if (!customerId) {
+
+    if (!this.customerId) {
       this.hireMessage = 'Customer ID not found!';
+      console.error('❌ Error: Customer ID is missing!');
       return;
     }
-  
-    const hireRequest = {
-      guardId: this.selectedGuard?.id,
-      startDate: this.hireData.startDate,
-      endDate: this.hireData.endDate,
-      totalPrice: this.totalPrice,
+
+    if (!this.selectedGuard || !this.selectedGuard.guard_id) {
+      this.hireMessage = 'Guard ID is missing!';
+      console.error('❌ Error: Guard ID is missing!', this.selectedGuard);
+      return;
+    }
+
+    const hireRequest: Hiring = {
+      guard_id: this.selectedGuard.guard_id,
+      customer_id: this.customerId,
+      price: this.totalPrice,
+      start_date: new Date(this.hireData.start_date).toISOString(),
+      end_date: new Date(this.hireData.end_date).toISOString()
     };
-  
-    // ✅ เปลี่ยน URL ให้ถูกต้อง (เพิ่ม customerId)
-    this.http.post(`http://localhost:5253/api/Hiring/${customerId}`, hireRequest)
+
+    console.log('🚀 API URL:', `http://localhost:5253/api/Hiring/${this.customerId}`);
+    console.log('📌 Payload being sent:', JSON.stringify(hireRequest, null, 2));
+
+    this.http.post(`http://localhost:5253/api/Hiring/${this.customerId}`, hireRequest)
       .subscribe({
         next: () => {
           this.hireMessage = 'Successfully hired guard!';
           this.selectedGuard = null;
         },
         error: (err) => {
-          console.error('Error hiring guard:', err);
-          this.hireMessage = `Failed to hire guard: ${err.message}`;
+          console.error('❌ Error hiring guard:', err);
+          console.error('📌 Server Response:', err.error);
+          this.hireMessage = `Failed to hire guard: ${err.error?.message || err.message}`;
         }
       });
   }
-  
 
-  // ✅ ปิดฟอร์มจ้างงาน
   cancelHire(): void {
     this.selectedGuard = null;
   }

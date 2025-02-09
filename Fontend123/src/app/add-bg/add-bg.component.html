@@ -77,8 +77,11 @@
     <div class="form-group">
       <select formControlName="type" required aria-describedby="typeError">
         <option value="" disabled selected>Select Type</option>
-        <option value="Located">Located</option>
-        <option value="Unarmed">Unarmed</option>
+        <option value="Static">Static</option>
+        <option value="CloseProtection">Close Protection</option>
+        <option value="Mobile">Mobile</option>
+        <option value="Covert">Covert</option>
+        <option value="Specialist">Specialist</option>
       </select>
       <div *ngIf="bodyguardForm.get('type')?.invalid && bodyguardForm.get('type')?.touched" id="typeError">
         <small style="color: red;" role="alert">Type is required.</small>

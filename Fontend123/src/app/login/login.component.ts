@@ -187,7 +187,7 @@ export class LoginComponent implements OnInit {
   
     const loginData = this.loginForm.value;
   
-    this.http.post<{ token: string, role: string }>(
+    this.http.post<{ token: string, role: string, id: string }>(
       'http://localhost:5253/api/Auth/login',
       loginData,
       { headers: { 'Content-Type': 'application/json' } } // ✅ เพิ่ม Headers
@@ -195,6 +195,7 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('token', response.token);
+          localStorage.setItem('id', response.id);
         }
   
         if (response.role === 'Customer') {

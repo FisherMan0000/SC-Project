@@ -65,9 +65,9 @@ namespace Backend.Controllers
 
                 // Query to fetch user details based on the username
                 var user = connection.QueryFirstOrDefault<User>(
-                    @"SELECT u.username, u.password, u.role 
-            FROM Users u 
-            WHERE u.username = @Username",
+                    @"SELECT u.username, u.password, u.role, u.Id
+              FROM Users u 
+              WHERE u.username = @Username",
                     new { Username = loginRequest.Username });
 
                 if (user == null)
@@ -87,11 +87,11 @@ namespace Backend.Controllers
                 // Handle role-based login
                 if (user.Role == "Manager")
                 {
-                    return Ok(new { success = true, role = "Manager", message = "Manager login successful", token });
+                    return Ok(new { success = true, role = "Manager", Id = user.Id, message = "Manager login successful", token });
                 }
                 else if (user.Role == "Customer")
                 {
-                    return Ok(new { success = true, role = "Customer", message = "Customer login successful", token });
+                    return Ok(new { success = true, role = "Customer", Id = user.Id, message = "Customer login successful", token });
                 }
                 else
                 {
@@ -137,8 +137,8 @@ namespace Backend.Controllers
                     // Insert into Users and get the UserId
                     var userId = connection.QuerySingle<int>(
                         @"INSERT INTO Users (username, password, role) 
-                        VALUES (@Username, @Password, @Role);
-                        SELECT CAST(SCOPE_IDENTITY() as int);",
+                          VALUES (@Username, @Password, @Role);
+                          SELECT CAST(SCOPE_IDENTITY() as int);",
                         new
                         {
                             Username = customer.Username,
@@ -151,7 +151,7 @@ namespace Backend.Controllers
 
                     connection.Execute(
                         @"INSERT INTO Customer (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id) 
-                        VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
+                          VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
                         customer);
 
                     return Ok(new { success = true, message = "User registered successfully" });
@@ -199,8 +199,8 @@ namespace Backend.Controllers
                     // Insert into Users table and get the UserId
                     var userId = connection.QuerySingle<int>(
                         @"INSERT INTO Users (username, password, role) 
-                VALUES (@Username, @Password, @Role);
-                SELECT CAST(SCOPE_IDENTITY() as int);",
+                  VALUES (@Username, @Password, @Role);
+                  SELECT CAST(SCOPE_IDENTITY() as int);",
                         new
                         {
                             Username = manager.Username,
@@ -212,8 +212,8 @@ namespace Backend.Controllers
                     manager.User_id = userId;
 
                     connection.Execute(
-                        @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_id) 
-                VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @User_id);",
+                        @"INSERT INTO Manager (Name, Email, Username, Password, PhoneNo, Address, Gender, Dob, User_Id) 
+                  VALUES (@Name, @Email, @Username, @Password, @PhoneNo, @Address, @Gender, @Dob, @UserId);",
                         manager);
 
                     return Ok(new { success = true, message = "Manager added successfully" });

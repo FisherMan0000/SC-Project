@@ -1,1 +1,32 @@
 <app-sidebar></app-sidebar>
+<div class="container">
+    <h2>Hiring List</h2>
+  
+    <button (click)="fetchAllHiring()">Load Hiring Data</button>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  
+    <table *ngIf="hiringList.length > 0">
+      <thead>
+        <tr>
+          <th>Hiring ID</th>
+          <th>Customer Name</th>
+          <th>Guard Name</th>
+          <th>Price</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hiring of hiringList">
+            <td>{{ hiring.hiring_id }}</td>
+            <td>{{ hiring.customerName }}</td>
+            <td>{{ hiring.guardName }}</td>
+            <td>{{ hiring.price ?? 'N/A' }}</td>
+            <td>{{ hiring.start_date ? (hiring.start_date | date: 'yyyy-MM-dd HH:mm') : 'N/A' }}</td>
+            <td>{{ hiring.end_date ? (hiring.end_date | date: 'yyyy-MM-dd HH:mm') : 'N/A' }}</td>
+            
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
