@@ -1,4 +1,4 @@
-<!-- แสดง Guard Cards -->
+
 <div class="card-container" *ngIf="guards.length > 0">
   <div class="card" *ngFor="let guard of guards">
     <img [src]="guard.image_url || 'assets/default-guard.png'" alt="Guard Image" class="card-image">

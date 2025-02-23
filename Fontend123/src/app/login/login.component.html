@@ -1,9 +1,10 @@
 <div class="container">
+  <div class="card">
     <!-- Login Form -->
-    <div *ngIf="isLogin" >
+    <div *ngIf="isLogin">
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <h1>Login</h1>
-        <input  type="text" formControlName="username" placeholder="Username" required />
+        <input type="text" formControlName="username" placeholder="Username" required />
         <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
           <small style="color: red;">Username is required.</small>
         </div>
@@ -16,12 +17,11 @@
         <button type="button" (click)="toggleForm()">Go to Register</button>
       </form>
     </div>
-  
+
     <!-- Register Form -->
     <div *ngIf="!isLogin">
       <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
         <h1>Register</h1>
-
         <input type="text" formControlName="name" placeholder="Name" required />
         <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
           <small style="color: red;">Name is required.</small>
@@ -44,8 +44,8 @@
 
         <input type="password" formControlName="confirmPassword" placeholder="Confirm Password" required />
         <div *ngIf="registerForm.errors?.['passwordMismatch']">
-            <small style="color: red;">Passwords do not match.</small>
-          </div>
+          <small style="color: red;">Passwords do not match.</small>
+        </div>
 
         <input type="text" formControlName="PhoneNo" placeholder="Phone Number" required />
         <div *ngIf="registerForm.get('PhoneNo')?.invalid && registerForm.get('PhoneNo')?.touched">
@@ -67,11 +67,9 @@
           <small style="color: red;">Date of Birth is required.</small>
         </div>
 
-        
-
         <button type="submit" [disabled]="registerForm.invalid">Register</button>
         <button type="button" (click)="toggleForm()">Go to Login</button>
       </form>
     </div>
   </div>
-
+</div>

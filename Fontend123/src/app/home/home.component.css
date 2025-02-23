@@ -1,0 +1,86 @@
+/* Container หลักของหน้า Home */
+.home-container {
+    padding: 20px;
+    background: #f1f1f1;
+    min-height: 100vh;
+  }
+  
+  /* Card Container จัดรูปแบบเป็น Grid 3 คอลัมน์ */
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* การ์ดแต่ละใบ */
+  .card {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* รูปภาพของการ์ด */
+  .card-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  /* เนื้อหาภายในการ์ด */
+  .guard-card {
+    padding: 15px;
+    background: #fff;
+    text-align: center;
+  }
+  
+  .guard-card h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2c3e50;
+  }
+  
+  .guard-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* ปุ่มจ้าง Guard */
+  .guard-card button {
+    background: #3498db;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .guard-card button:hover {
+    background: #2980b9;
+  }
+  
+  /* Responsive Design: เมื่อหน้าจอเล็กลงปรับเป็น 2 คอลัมน์ */
+  @media (max-width: 992px) {
+    .card-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* เมื่อหน้าจอเล็กมาก ปรับเป็น 1 คอลัมน์ */
+  @media (max-width: 576px) {
+    .card-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  

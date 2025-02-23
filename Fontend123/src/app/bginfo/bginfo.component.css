@@ -33,6 +33,12 @@ button {
   border: none;
   border-radius: 6px;
   transition: background 0.3s ease;
+  margin: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+  border: 1px solid #000000;
+  box-sizing: border-box;
 }
 .edit-btn {
   background-color: #007bff;

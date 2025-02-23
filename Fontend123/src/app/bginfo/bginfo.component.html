@@ -23,6 +23,7 @@
 <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 
 <!-- Card Container -->
+
 <div class="card-container">
   <div class="card" *ngFor="let guard of guards">
     <img [src]="guard.image_url || 'assets/default-guard.png'" alt="Guard Image" class="card-image">
@@ -38,7 +39,8 @@
       <button (click)="editGuard(guard)">Edit</button>
     </div>
   </div>
-</div>
+  </div>
+
 
 <!-- Popup Modal -->
 <div class="modal-overlay" *ngIf="editingGuard">
